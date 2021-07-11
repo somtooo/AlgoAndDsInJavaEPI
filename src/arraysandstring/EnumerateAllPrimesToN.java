@@ -1,5 +1,7 @@
 package arraysandstring;
 
+import scoring.Score;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,5 +31,6 @@ public class EnumerateAllPrimesToN {
   public static void main(String[] args) {
     var sol = new EnumerateAllPrimesToN();
     System.out.println(sol.solution(18));
+    System.out.println(Score.scoreSolution(3,1,2,2));
   }
 }

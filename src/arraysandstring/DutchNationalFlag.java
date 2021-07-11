@@ -1,5 +1,7 @@
 package arraysandstring;
 
+import scoring.Score;
+
 import java.util.Arrays;
 
 public  class  DutchNationalFlag {
@@ -33,6 +35,9 @@ public  class  DutchNationalFlag {
   }
 
   //solved in 32 min
+  //did you need hints
+  //optimal solutions
+  //how many bugs
   public static void main(String[] args) {
     var d = new DutchNationalFlag();
     int[] A = {12,3,13,0,8,14,8,15,13};
@@ -40,5 +45,6 @@ public  class  DutchNationalFlag {
 
     var answer = d.solveDutchNationalFlag(A, index);
     System.out.println(Arrays.toString(answer));
+    System.out.println(Score.scoreSolution(1,2,3,2));
   }
 }

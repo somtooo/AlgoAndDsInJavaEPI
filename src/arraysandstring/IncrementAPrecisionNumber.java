@@ -1,5 +1,7 @@
 package arraysandstring;
 
+import scoring.Score;
+
 import java.util.Arrays;
 
 public class IncrementAPrecisionNumber {
@@ -19,8 +21,10 @@ public class IncrementAPrecisionNumber {
 
   //Solved in 20min
   public static void main(String[] args) {
-    int[] arr = {9,9,9};
+    int[] arr = {1,2,3};
     var add = new IncrementAPrecisionNumber();
     System.out.println(Arrays.toString(add.solution(arr)));
+    
+    System.out.println(Score.scoreSolution(3,4,2,3));
   }
 }
