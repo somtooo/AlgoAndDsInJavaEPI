@@ -2,6 +2,7 @@ package arraysandstring;
 
 import scoring.Score;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class SudokuChecker {
@@ -42,6 +43,7 @@ public class SudokuChecker {
         {63, 64, 65, 66, 67, 68, 69, 70, 71},
         {72, 73, 74, 75, 76, 77, 78, 79, 0}
     };
+    System.out.println(Arrays.toString(array[0]));
     System.out.println(solution(array));
     System.out.println(Score.scoreSolution(2,4,2,3));
   }
