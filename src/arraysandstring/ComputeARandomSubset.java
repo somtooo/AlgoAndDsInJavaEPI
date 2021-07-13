@@ -4,19 +4,20 @@ import scoring.Score;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 public class ComputeARandomSubset {
 
   public int[] solution(int num, int size) {
     var arr = new int[size];
-    var hashMap = new HashMap<Integer,Integer>();
+    var hashMap = new HashSet<Integer>();
     var rand = new Random();
     int i = 0;
     while (i < arr.length) {
       var randNum = rand.nextInt(num);
-      if (hashMap.get(randNum) == null) {
-        hashMap.put(randNum, i);
+      if (!hashMap.contains(randNum)) {
+        hashMap.add(randNum);
         arr[i] = randNum;
         i++;
       }
