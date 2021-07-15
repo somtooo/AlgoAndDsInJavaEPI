@@ -1,5 +1,7 @@
 package arraysandstring;
 
+import scoring.Score;
+
 public class TestPalindromicity {
 
   public static boolean solution(String test) {
@@ -13,7 +15,7 @@ public class TestPalindromicity {
       divisor  = test.length()/2 + 1;
     }
 
-    for (int i = 0; i < divisor; i++) {
+    for (int i = 0; i < test.length()/2; i++) {
       if (test.charAt(i) != test.charAt(back)) {
         return false;
       }
@@ -25,5 +27,6 @@ public class TestPalindromicity {
 
   public static void main(String[] args) {
     System.out.println(solution("google"));
+    System.out.println(Score.scoreSolution(4,4,4,4));
   }
 }
