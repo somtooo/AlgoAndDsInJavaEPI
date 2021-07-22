@@ -15,13 +15,10 @@ public class ComputeTheSpreadSheetColumn {
       map.put(ch, value);
       value++;
     }
-
     var reversed = new StringBuilder().append(encoding).reverse();
-
     for(int i=0; i < reversed.length(); i++) {
       ans = (int) (ans + (map.get(reversed.charAt(i)) * Math.pow(26, i)));
     }
-
     return ans;
   }
 
