@@ -102,10 +102,13 @@ public class MultiplyTwoArbitraryInt {
     var ar1 = new int[]{7,6,1,8,3,8};
     var ar2 = new int[]{1,9};
     List<Integer> a = new ArrayList<>();
-    Collections.addAll(a,7,6,1,8,3,8,2,5,7,2,8,7);
+    Collections.addAll(a,7,6,1,8,3,8,2,5,7,2,8,7); //12
     List<Integer> q = new ArrayList<>();
-    Collections.addAll(q,1,9,3, 7,0,7,7, 2,1);
-    System.out.println(solution2(a,q));
+    Collections.addAll(q,1,9,3, 7,0,7,7, 2,1); //9
+    long startTime = System.currentTimeMillis();
+    System.out.println(solution(ar1,ar2));
+    long endTime = System.currentTimeMillis();
+    System.out.println("Total execution time: " + (endTime-startTime) + "ms");
   }
 
 
