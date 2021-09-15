@@ -1,16 +1,62 @@
 package trees;
 
-import java.util.List;
-
 public class ElementNode<T extends Comparable<T>> {
     private final T object;
     private ElementNode<T> rightNode;
     private ElementNode<T> leftNode;
 
+
     public ElementNode(T object) {
         this.object = object;
         rightNode = null;
         leftNode = null;
+    }
+
+    public static class Ancestor {
+        private Integer looking;
+        private boolean complete;
+        private Integer lca;
+        private boolean beLca;
+
+        public Ancestor() {
+            this.lca = null;
+            this.beLca = false;
+            this.looking = null;
+            this.complete = false;
+        }
+
+        public Integer getLca() {
+            return lca;
+        }
+
+        public void setLca(Integer lca) {
+            this.lca = lca;
+        }
+        
+        public void setBeLca(boolean s) {
+            this.beLca = s;
+        }
+        
+        public boolean getBeLca() {
+            return beLca;
+        }
+
+        public void setLooking(Integer b) {
+            this.looking = b;
+        }
+
+
+        public void setComplete(boolean b) {
+            this.complete = b;
+        }
+
+        public Integer getLooking() {
+            return looking;
+        }
+
+        public boolean isComplete() {
+            return complete;
+        }
     }
 
 
@@ -41,6 +87,105 @@ public class ElementNode<T extends Comparable<T>> {
             return object;
         }
         return object +  right;
+    }
+
+    public Integer lca(Integer a, Integer b, Ancestor lcA) {
+        if (lcA.getLca() == null) {
+            if (Integer.valueOf(this.object.toString()) == a){
+                lcA.setLca(a);
+                lcA.setLooking(b);
+            } else if (Integer.valueOf(this.object.toString()) == b) {
+                lcA.setLca(b);
+                lcA.setLooking(a);
+            }
+        } else if (lcA.getLca() != null){
+            if (lcA.getLooking() == Integer.valueOf(this.object.toString())) {
+                lcA.setComplete(true);
+                return lcA.getLca();
+            }
+        }
+
+
+        if (this.leftNode!=null) {
+            this.leftNode.lca(a,b,lcA);
+        }
+
+        if (lcA.isComplete()){
+            return lcA.getLca();
+        }
+
+
+        if (lcA.getBeLca()) {
+            System.out.println(this.object.toString());
+            lcA.setLca(Integer.valueOf(this.object.toString()));
+            lcA.setBeLca(false);
+        }
+        
+        if (this.rightNode!=null) {
+            this.rightNode.lca(a,b,lcA);
+        }
+
+        if (lcA.isComplete()){
+            return lcA.getLca();
+        }
+
+        if (Integer.valueOf(this.object.toString()) == lcA.getLca()) {
+            lcA.setBeLca(true);
+        }
+
+
+        return null;
+    }
+
+
+    public Integer lcaWithParent(Integer a, Integer b, Ancestor lcA) {
+        if (lcA.getLca() == null) {
+            if (Integer.valueOf(this.object.toString()) == a){
+                lcA.setLca(a);
+                lcA.setLooking(b);
+            } else if (Integer.valueOf(this.object.toString()) == b) {
+                lcA.setLca(b);
+                lcA.setLooking(a);
+            }
+        } else if (lcA.getLca() != null){
+            if (lcA.getLooking() == Integer.valueOf(this.object.toString())) {
+                lcA.setComplete(true);
+                return lcA.getLca();
+            }
+        }
+
+
+        if (this.leftNode!=null) {
+            this.leftNode.lca(a,b,lcA);
+        }
+
+        if (lcA.isComplete()){
+            return lcA.getLca();
+        }
+
+
+        if (lcA.getBeLca()) {
+            System.out.println(this.object.toString());
+            lcA.setLca(Integer.valueOf(this.object.toString()));
+            lcA.setBeLca(false);
+        }
+
+        if (this.rightNode!=null) {
+            this.rightNode.lca(a,b,lcA);
+        }
+
+        if (lcA.isComplete()){
+            return lcA.getLca();
+        }
+
+
+        //Change this line to change lca to parent.
+        if (Integer.valueOf(this.object.toString()) == lcA.getLca()) {
+            lcA.setBeLca(true);
+        }
+
+
+        return null;
     }
 
     public String preOrderRight() {
@@ -87,9 +232,10 @@ public class ElementNode<T extends Comparable<T>> {
         root.add(25);
         root.add(15);
         root.add(8);
+        root.add(9);
         root.add(6);
         root.add(4);
-
-        System.out.println(root.preOrderRight());
+        root.add(7);
+        System.out.println(root.lca(4,7,new Ancestor()));
     }
 }
