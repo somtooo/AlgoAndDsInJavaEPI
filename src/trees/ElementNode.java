@@ -247,17 +247,34 @@ public class ElementNode<T extends Comparable<T>> {
         }
         return left + right;
     }
-    public static void main(String[] args) {
-        var root = new ElementNode<Integer>(0b1);
-        var one = root.addLeft(0b0);
-        var two = root.addRight(0b1);
-        var three = one.addLeft(0b0);
-        var four = one.addRight(0b1);
-        var five = two.addLeft(0b0);
-        var six = two.addRight(0b0);
-        var seven = three.addLeft(0b0);
-        var eight = three.addRight(0b1);
 
-        System.out.println(Integer.toBinaryString(root.sumRootToLeaf(0b0)));
+    public boolean findRootWithSum(Integer data, Integer toCompare) {
+
+        Integer object = data + Integer.parseInt(this.object.toString());
+        if (toCompare.equals(object)) {
+            return true;
+        }
+        boolean left = (this.leftNode != null) ? this.leftNode.findRootWithSum(object, toCompare) : false;
+        if (left) {
+            return true;
+        }
+
+        boolean right = (this.rightNode != null) ? this.rightNode.findRootWithSum(object, toCompare) : false;
+
+        return right;
+
+    }
+    public static void main(String[] args) {
+        var root = new ElementNode<Integer>(314);
+        var one = root.addLeft(6);
+        var two = root.addRight(6);
+        var three = one.addLeft(271);
+        var four = one.addRight(561);
+        var five = two.addLeft(2);
+        var six = two.addRight(271);
+        var seven = three.addLeft(28);
+        var eight = three.addRight(1);
+
+        System.out.println(root.findRootWithSum(0,592));
     }
 }
