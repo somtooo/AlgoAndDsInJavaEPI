@@ -69,6 +69,16 @@ public class ElementNode<T extends Comparable<T>> {
         return this;
     }
 
+    public ElementNode<T> addLeft(T data) {
+        this.leftNode = new ElementNode<>(data);
+        return leftNode;
+    }
+
+    public ElementNode<T> addRight(T data) {
+        this.rightNode = new ElementNode<>(data);
+        return rightNode;
+    }
+
     public Integer height(ElementNode<T> tree) {
         if (tree == null) {
             return null;
@@ -116,7 +126,6 @@ public class ElementNode<T extends Comparable<T>> {
 
 
         if (lcA.getBeLca()) {
-            System.out.println(this.object.toString());
             lcA.setLca(Integer.valueOf(this.object.toString()));
             lcA.setBeLca(false);
         }
@@ -226,16 +235,27 @@ public class ElementNode<T extends Comparable<T>> {
     }
 
 
+    public String sumRootToLeaf(String data) {
+        var object = data +this.object.toString();
+        String left = (this.leftNode != null) ? this.leftNode.sumRootToLeaf(object) : object;
+
+        String right = (this.rightNode != null) ? this.rightNode.sumRootToLeaf(object) : "";
+
+        if (right.length() == 0) {
+            return left;
+        }
+        return left + " + " + right;
+    }
     public static void main(String[] args) {
         var root = new ElementNode<Integer>(10);
-        root.add(20);
-        root.add(25);
-        root.add(15);
-        root.add(8);
-        root.add(9);
-        root.add(6);
-        root.add(4);
-        root.add(7);
-        System.out.println(root.lca(4,7,new Ancestor()));
+        var one = root.addLeft(8);
+        var two = root.addRight(20);
+        var three = one.addLeft(6);
+        var four = one.addRight(9);
+        var five = two.addLeft(15);
+        var six = two.addRight(25);
+        var seven = three.addLeft(4);
+        var eight = three.addRight(7);
+        System.out.println(root.sumRootToLeaf(""));
     }
 }
