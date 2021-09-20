@@ -1,5 +1,8 @@
 package trees;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 public class ElementNode<T extends Comparable<T>> {
     private final T object;
     private ElementNode<T> rightNode;
@@ -264,6 +267,39 @@ public class ElementNode<T extends Comparable<T>> {
         return right;
 
     }
+
+    public String preOrderNoRec(ElementNode root) {
+        Deque<ElementNode> stack = new LinkedList<>();
+        stack.addFirst(root);
+        StringBuilder ans = new StringBuilder();
+        ans.append(root.object.toString()).append(" ");
+
+        while (stack.isEmpty() == false) {
+            var left = stack.peek().leftNode;
+            if (left!=null) {
+                ans.append(left.object.toString()).append(" ");
+                stack.addFirst(left);
+                continue;
+            }
+            var right = stack.peek().rightNode;
+            if (right!=null) {
+                ans.append(right.object.toString()).append(" ");
+                stack.removeFirst();
+                stack.addFirst(right);
+                continue;
+            } else if (right == null) {
+                stack.removeFirst();
+
+                if (stack.peek()!= null) {
+                    stack.peek().leftNode = null;
+                }
+            }
+
+        }
+
+        return ans.toString();
+
+    }
     public static void main(String[] args) {
         var root = new ElementNode<Integer>(314);
         var one = root.addLeft(6);
@@ -275,6 +311,6 @@ public class ElementNode<T extends Comparable<T>> {
         var seven = three.addLeft(28);
         var eight = three.addRight(1);
 
-        System.out.println(root.findRootWithSum(0,592));
+        System.out.println(root.preOrderNoRec(root));
     }
 }
