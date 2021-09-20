@@ -235,27 +235,29 @@ public class ElementNode<T extends Comparable<T>> {
     }
 
 
-    public String sumRootToLeaf(String data) {
-        var object = data +this.object.toString();
-        String left = (this.leftNode != null) ? this.leftNode.sumRootToLeaf(object) : object;
+    public Integer sumRootToLeaf(Integer data) {
 
-        String right = (this.rightNode != null) ? this.rightNode.sumRootToLeaf(object) : "";
+        var object = data * 0b10 + Integer.parseInt(this.object.toString(),2);
+        Integer left = (this.leftNode != null) ? this.leftNode.sumRootToLeaf(object) : object;
 
-        if (right.length() == 0) {
+        Integer right = (this.rightNode != null) ? this.rightNode.sumRootToLeaf(object) : 0b0;
+
+        if (right == 0) {
             return left;
         }
-        return left + " + " + right;
+        return left + right;
     }
     public static void main(String[] args) {
-        var root = new ElementNode<Integer>(10);
-        var one = root.addLeft(8);
-        var two = root.addRight(20);
-        var three = one.addLeft(6);
-        var four = one.addRight(9);
-        var five = two.addLeft(15);
-        var six = two.addRight(25);
-        var seven = three.addLeft(4);
-        var eight = three.addRight(7);
-        System.out.println(root.sumRootToLeaf(""));
+        var root = new ElementNode<Integer>(0b1);
+        var one = root.addLeft(0b0);
+        var two = root.addRight(0b1);
+        var three = one.addLeft(0b0);
+        var four = one.addRight(0b1);
+        var five = two.addLeft(0b0);
+        var six = two.addRight(0b0);
+        var seven = three.addLeft(0b0);
+        var eight = three.addRight(0b1);
+
+        System.out.println(Integer.toBinaryString(root.sumRootToLeaf(0b0)));
     }
 }
