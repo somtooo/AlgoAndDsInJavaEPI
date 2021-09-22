@@ -408,6 +408,42 @@ public class ElementNode<T extends Comparable<T>> {
         return (this.leftNode != null) ? this.leftNode.preOrderShort() : this.object.toString();
     }
 
+    public String inOrderWithParent() {
+        ElementNode<T> left = (this.leftNode != null) ? this.leftNode : this.rightNode;
+        StringBuilder ans = new StringBuilder();
+        ElementNode<T> leftchild = left;
+        ElementNode<T> rightchild = left;
+    while (true) {
+        if (left.leftNode != null && left.leftNode != leftchild) {
+            left = left.leftNode;
+            continue;
+        }
+
+        if (left.rightNode != rightchild) {
+          ans.append(left.object.toString()).append(" "); // 28,271,0,6,561,17,3
+        }
+
+        if (left.rightNode != null && left.rightNode != rightchild) {
+            left = left.rightNode;
+        } else {
+            if (left.parent == null) {
+                break;
+            }
+            if (left.parent.rightNode == left) {
+                rightchild = left;
+                left = left.parent;
+
+                leftchild = left.leftNode;
+                continue;
+            }
+            leftchild = left;
+            left = left.parent;
+
+        }
+        }
+    return ans.toString();
+    }
+
     public static void main(String[] args) {
 //        var root = new ElementNode<Integer>(314,8);
 //        var one = root.addLeft(6,4);
@@ -428,7 +464,9 @@ public class ElementNode<T extends Comparable<T>> {
         var six = two.addRight(0,two);
         var seven = three.addLeft(28,three);
         var eight = three.addRight(1,three);
-        System.out.println(six.successor());
+        var nine = four.addRight(3, four);
+        var ten = nine.addLeft(17, nine);
+        System.out.println(root.inOrderWithParent());
 //        System.out.println(root.preOrder());
     }
 }
