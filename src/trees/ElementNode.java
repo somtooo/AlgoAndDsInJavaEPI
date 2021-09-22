@@ -8,10 +8,18 @@ public class ElementNode<T extends Comparable<T>> {
     private ElementNode<T> rightNode;
     private ElementNode<T> leftNode;
     private int numOfNodes;
+    private ElementNode<T> parent;
 
 
     public ElementNode(T object) {
         this.object = object;
+        rightNode = null;
+        leftNode = null;
+    }
+
+    public ElementNode(T object, ElementNode<T> parent) {
+        this.object = object;
+        this.parent = parent;
         rightNode = null;
         leftNode = null;
     }
@@ -22,6 +30,8 @@ public class ElementNode<T extends Comparable<T>> {
         rightNode = null;
         leftNode = null;
     }
+
+
 
     public static class Ancestor {
         private Integer looking;
@@ -85,6 +95,11 @@ public class ElementNode<T extends Comparable<T>> {
         return leftNode;
     }
 
+    public ElementNode<T> addLeft(T data, ElementNode<T> parent) {
+        this.leftNode = new ElementNode<>(data, parent);
+        return leftNode;
+    }
+
     public ElementNode<T> addLeft(T data, int num) {
         this.leftNode = new ElementNode<>(data, num);
         return leftNode;
@@ -92,6 +107,11 @@ public class ElementNode<T extends Comparable<T>> {
 
     public ElementNode<T> addRight(T data) {
         this.rightNode = new ElementNode<>(data);
+        return rightNode;
+    }
+
+    public ElementNode<T> addRight(T data, ElementNode<T> parent) {
+        this.rightNode = new ElementNode<>(data, parent);
         return rightNode;
     }
 
@@ -353,31 +373,62 @@ public class ElementNode<T extends Comparable<T>> {
 
     public String kthNodeInorderTraversal(int nodeNum, int seen) {
         var numOfNodesInLeftSubtree = (this.rightNode!= null) ? (this.numOfNodes - (this.rightNode.numOfNodes+1)) : 0;
-        var left = "";
-        var right = "";
         if (nodeNum <= numOfNodesInLeftSubtree + seen) {
-          left =   (this.leftNode!=null) ? this.leftNode.kthNodeInorderTraversal(nodeNum, seen) : "";
+          var left =   (this.leftNode!=null) ? this.leftNode.kthNodeInorderTraversal(nodeNum, seen) : "";
           if (left.length()!= 0) {
               return left;
           }
         }else if (nodeNum == (numOfNodesInLeftSubtree + seen)+1) {
             return this.object.toString();
-        } else {
-           right =  (this.rightNode!= null) ? this.rightNode.kthNodeInorderTraversal(nodeNum, (numOfNodesInLeftSubtree+seen)+1) : "";
         }
-        return right;
+        return (this.rightNode!= null) ? this.rightNode.kthNodeInorderTraversal(nodeNum, (numOfNodesInLeftSubtree+seen)+1) : "";
     }
+
+    public String successor() {
+        if (this.rightNode == null) {
+            return backTrack();
+        } else {
+            return this.rightNode.preOrderShort();
+        }
+    }
+
+    private String backTrack() {
+        var parentNode = this.parent;
+    if (parentNode != null) {
+      if (parentNode.leftNode.object.toString().equals(this.object.toString())) {
+        return parentNode.object.toString();
+      } else {
+        return parentNode.backTrack();
+      }
+        }
+    return "";
+    }
+
+    private String preOrderShort() {
+        return (this.leftNode != null) ? this.leftNode.preOrderShort() : this.object.toString();
+    }
+
     public static void main(String[] args) {
-        var root = new ElementNode<Integer>(314,8);
-        var one = root.addLeft(6,4);
-        var two = root.addRight(6,2);
-        var three = one.addLeft(271,2);
-        var four = one.addRight(561,0);
-        var five = two.addLeft(2,0);
-        var six = two.addRight(0,0);
-        var seven = three.addLeft(28,0);
-        var eight = three.addRight(1,0);
-        System.out.println(root.kthNodeInorderTraversal(9,0));
+//        var root = new ElementNode<Integer>(314,8);
+//        var one = root.addLeft(6,4);
+//        var two = root.addRight(6,2);
+//        var three = one.addLeft(271,2);
+//        var four = one.addRight(561,0);
+//        var five = two.addLeft(2,0);
+//        var six = two.addRight(0,0);
+//        var seven = three.addLeft(28,0);
+//        var eight = three.addRight(1,0);
+
+        var root = new ElementNode<Integer>(314,null);
+        var one = root.addLeft(6,root);
+        var two = root.addRight(3,root);
+        var three = one.addLeft(271,one);
+        var four = one.addRight(561,one);
+        var five = two.addLeft(2,two);
+        var six = two.addRight(0,two);
+        var seven = three.addLeft(28,three);
+        var eight = three.addRight(1,three);
+        System.out.println(six.successor());
 //        System.out.println(root.preOrder());
     }
 }
