@@ -1,9 +1,6 @@
 package trees;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ElementNode<T extends Comparable<T>> {
     private final T object;
@@ -457,6 +454,32 @@ public class ElementNode<T extends Comparable<T>> {
         return root;
     }
 
+    public ElementNode<T> treeFromPreOrderData(List<T> preOrder) {
+        ElementNode<T> root = new ElementNode<>(preOrder.get(0));
+        root.buildPreOrderTree(1, preOrder);
+        return root;
+    }
+
+    private int buildPreOrderTree(Integer i, List<T> preOrder) {
+        if (i >= preOrder.size()) {
+            return i;
+        }
+        var data = preOrder.get(i);
+        if (data != null) {
+            this.leftNode = new ElementNode<>(data);
+            i++;
+            i = this.leftNode.buildPreOrderTree(i, preOrder);
+        }
+        i++;
+
+        data = preOrder.get(i);
+        if (data != null) {
+            this.rightNode = new ElementNode<>(data);
+            i++;
+            i = this.rightNode.buildPreOrderTree(i, preOrder);
+        }
+        return i;
+    }
 
 
     private void helper(List<T> inorder, T preOrderObject) {
@@ -516,13 +539,13 @@ public class ElementNode<T extends Comparable<T>> {
 //        System.out.println(root.inOrderWithParent());
 
         List<String> preOrder = new ArrayList<String>(
-            List.of("H","B","F","E","A","C","D","G","I")
+            Arrays.asList("A","B","C","D","E",null,null,"F",null,null,"G",null,null,"H","I",null,null,"J",null,null,"K","L","M",null,null,"N",null,null,"O",null,null)
         );
 
         List<String> inOrder = new ArrayList<String>(
             List.of("F","B","A","E","H","C","D","I","G")
         );
 
-        System.out.println(root.treeFromTraversalData(preOrder,inOrder).preOrder());
+        System.out.println(root.treeFromPreOrderData(preOrder).preOrder());
     }
 }
