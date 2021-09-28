@@ -1,7 +1,9 @@
 package trees;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ElementNode<T extends Comparable<T>> {
     private final T object;
@@ -444,6 +446,51 @@ public class ElementNode<T extends Comparable<T>> {
     return ans.toString();
     }
 
+    public  ElementNode<T> treeFromTraversalData(List<T> preOrder, List<T> inorder) {
+        var preOrderIndex = 0;
+        ElementNode<T> root = new ElementNode<>(preOrder.get(preOrderIndex));
+        preOrderIndex++;
+        while (preOrderIndex < preOrder.size()) {
+            root.helper(inorder,preOrder.get(preOrderIndex));
+            preOrderIndex++;
+        }
+        return root;
+    }
+
+
+
+    private void helper(List<T> inorder, T preOrderObject) {
+        String location = checkLocation(preOrderObject, inorder, this);
+
+        if (location.equals("left")) {
+            if (this.leftNode != null) {
+                this.leftNode.helper(inorder,preOrderObject);
+            } else {
+                this.leftNode = new ElementNode<>(preOrderObject);
+            }
+        }
+
+        else if (location.equals("right")) {
+            if (this.rightNode != null) {
+                this.rightNode.helper(inorder, preOrderObject);
+            } else {
+                this.rightNode = new ElementNode<>(preOrderObject);
+            }
+        }
+    }
+
+    private String checkLocation(T preOrderObject, List<T> inorder, ElementNode<T> tElementNode) {
+        for (Object value : inorder ) {
+            if (value.toString().equals(tElementNode.object.toString())) {
+                return "right";
+            } else if (value.toString().equals(preOrderObject.toString())) {
+                return "left";
+            }
+        }
+
+        return "";
+    }
+
     public static void main(String[] args) {
 //        var root = new ElementNode<Integer>(314,8);
 //        var one = root.addLeft(6,4);
@@ -455,18 +502,27 @@ public class ElementNode<T extends Comparable<T>> {
 //        var seven = three.addLeft(28,0);
 //        var eight = three.addRight(1,0);
 
-        var root = new ElementNode<Integer>(314,null);
-        var one = root.addLeft(6,root);
-        var two = root.addRight(3,root);
-        var three = one.addLeft(271,one);
-        var four = one.addRight(561,one);
-        var five = two.addLeft(2,two);
-        var six = two.addRight(0,two);
-        var seven = three.addLeft(28,three);
-        var eight = three.addRight(1,three);
-        var nine = four.addRight(3, four);
-        var ten = nine.addLeft(17, nine);
-        System.out.println(root.inOrderWithParent());
-//        System.out.println(root.preOrder());
+        ElementNode<String> root = new ElementNode<String>("");
+//        var one = root.addLeft(6,root);
+//        var two = root.addRight(3,root);
+//        var three = one.addLeft(271,one);
+//        var four = one.addRight(561,one);
+//        var five = two.addLeft(2,two);
+//        var six = two.addRight(0,two);
+//        var seven = three.addLeft(28,three);
+//        var eight = three.addRight(1,three);
+//        var nine = four.addRight(3, four);
+//        var ten = nine.addLeft(17, nine);
+//        System.out.println(root.inOrderWithParent());
+
+        List<String> preOrder = new ArrayList<String>(
+            List.of("H","B","F","E","A","C","D","G","I")
+        );
+
+        List<String> inOrder = new ArrayList<String>(
+            List.of("F","B","A","E","H","C","D","I","G")
+        );
+
+        System.out.println(root.treeFromTraversalData(preOrder,inOrder).preOrder());
     }
 }

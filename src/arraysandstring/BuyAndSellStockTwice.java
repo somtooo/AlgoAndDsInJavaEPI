@@ -64,6 +64,31 @@ public class BuyAndSellStockTwice {
     return profit + profit2;
   }
 
+  public static double thirdAttempt(int[] prices) {
+    double min = Double.MAX_VALUE, max = 0.0, cache = max;
+    double sMin = Double.MAX_VALUE, sMax = 0.0;
+    int secondBuyIndex =1;
+
+
+    for (int i = 0; i < prices.length ; i++) {
+      max = Math.max(max, (prices[i] - min));
+      min = Math.min(min, prices[i]);
+      if (max > cache) {
+        sMin = prices[i+1];
+        secondBuyIndex = i +1;
+        cache = max;
+      }
+
+      sMax = Math.max(sMax, (prices[secondBuyIndex] - sMin));
+      sMin = Math.min(min, prices[secondBuyIndex]);
+      secondBuyIndex++;
+
+    }
+
+
+    return max + sMax;
+  }
+
   //solved in 23min
   public static void main(String[] args) {
     int[] arr = {310,315, 275, 295, 260, 270, 290, 230, 255, 250};
