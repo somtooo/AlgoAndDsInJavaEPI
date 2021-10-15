@@ -8,12 +8,16 @@ public class ElementNode<T extends Comparable<T>> {
     private ElementNode<T> leftNode;
     private int numOfNodes;
     private ElementNode<T> parent;
+    private final int size;
+    private String status;
 
 
     public ElementNode(T object) {
         this.object = object;
         rightNode = null;
         leftNode = null;
+        size = 1;
+        status = "unlocked";
     }
 
     public ElementNode(T object, ElementNode<T> parent) {
@@ -21,6 +25,8 @@ public class ElementNode<T extends Comparable<T>> {
         this.parent = parent;
         rightNode = null;
         leftNode = null;
+        size = 1;
+        status = "unlocked";
     }
 
     public ElementNode(T object, int numOfNodes) {
@@ -28,6 +34,8 @@ public class ElementNode<T extends Comparable<T>> {
         this.numOfNodes = numOfNodes;
         rightNode = null;
         leftNode = null;
+        size = 1;
+        status = "unlocked";
     }
 
 
@@ -91,6 +99,7 @@ public class ElementNode<T extends Comparable<T>> {
 
     public ElementNode<T> addLeft(T data) {
         this.leftNode = new ElementNode<>(data);
+
         return leftNode;
     }
 
@@ -126,6 +135,17 @@ public class ElementNode<T extends Comparable<T>> {
         int left = (tree.leftNode!=null)? tree.height(tree.leftNode)+1 :0;
         int right = (tree.rightNode!=null) ? tree.rightNode.height(tree.rightNode) + 1 : 0;
         return Math.max(left,right);
+    }
+
+    public int getSize() {
+        var object = this.size;
+        var left = (this.leftNode!=null) ? this.leftNode.getSize() : 0;
+        object = object  + left;
+        var right = (this.rightNode!=null) ? this.rightNode.getSize(): 0;
+        if (right == 0) {
+            return object;
+        }
+        return object +  right;
     }
 
     public String preOrder() {
@@ -514,18 +534,86 @@ public class ElementNode<T extends Comparable<T>> {
         return "";
     }
 
-    public static void main(String[] args) {
-//        var root = new ElementNode<Integer>(314,8);
-//        var one = root.addLeft(6,4);
-//        var two = root.addRight(6,2);
-//        var three = one.addLeft(271,2);
-//        var four = one.addRight(561,0);
-//        var five = two.addLeft(2,0);
-//        var six = two.addRight(0,0);
-//        var seven = three.addLeft(28,0);
-//        var eight = three.addRight(1,0);
+    public String convertTreeToList(LinkedList<String> list) {
+        var left = (this.leftNode != null) ? this.leftNode.convertTreeToList(list) : "";
+        var right = (this.rightNode!=null) ? this.rightNode.convertTreeToList(list) : "";
+        if (left.equals("") & right.equals("")) {
+            list.add(this.object.toString());
+        }
+        return this.object.toString();
+    }
 
-        ElementNode<String> root = new ElementNode<String>("");
+    public boolean isLocked() {
+        return !this.status.equals("unlocked");
+    }
+
+    public void lockNode() {
+        var ancestorIsLocked = this.parent.checkAncestors();
+        if (!this.isLocked() && !ancestorIsLocked) {
+            this.status = "locked";
+        }
+    }
+
+    private boolean checkAncestors() {
+        var left = (this.parent != null) ? this.parent.checkAncestors() : false;
+        return this.isLocked() & left;
+    }
+
+    private boolean checkDescendants() {
+        var isLocked = this.isLocked();
+        var left = (this.leftNode != null) ? this.leftNode.checkDescendants() : false;
+        isLocked = left && isLocked;
+
+        var right = (this.rightNode != null) ? this.rightNode.checkDescendants() : false;
+
+        return right && isLocked;
+    }
+
+    public String computeExterior() {
+        String rootToLeftMostLeaf = this.computeRootToLeftMost();
+        String leafNodes = this.computeLeafNodes();
+        String rootToRightMostLeaf = this.rightNode.computeRootToRightMost();
+        return rootToLeftMostLeaf.concat(leafNodes).concat(rootToRightMostLeaf);
+    }
+    private String computeLeafNodes() {
+        String object = "";
+        String left = (this.leftNode != null) ? this.leftNode.computeLeafNodes(): "";
+
+        String right = (this.rightNode != null) ? this.rightNode.computeLeafNodes(): "";
+        if((left.length() == 0) && (right.length() == 0)) {
+            object = this.object.toString() + right;
+            return object;
+        }
+        return left + " " + right;
+    }
+
+    private String computeRootToLeftMost() {
+        String object = this.object.toString();
+        String left = (this.leftNode.leftNode != null) ? this.leftNode.computeRootToLeftMost(): "";
+        object = object + " " + left;
+        return object;
+    }
+
+    private String computeRootToRightMost() {
+        String right = (this.rightNode.rightNode !=null) ? this.rightNode.computeRootToRightMost(): "";
+        String object = this.object.toString();
+        object = right + " " + object;
+        return object;
+    }
+
+
+    public static void main(String[] args) {
+        var root = new ElementNode<Integer>(314,8);
+        var one = root.addLeft(6,4);
+        var two = root.addRight(6,2);
+        var three = one.addLeft(271,2);
+        var four = one.addRight(561,0);
+        var five = two.addLeft(2,0);
+        var six = two.addRight(0,0);
+        var seven = three.addLeft(28,0);
+        var eight = three.addRight(1,0);
+
+//        ElementNode<Integer> root = new ElementNode<Integer>(314);
 //        var one = root.addLeft(6,root);
 //        var two = root.addRight(3,root);
 //        var three = one.addLeft(271,one);
@@ -546,6 +634,9 @@ public class ElementNode<T extends Comparable<T>> {
             List.of("F","B","A","E","H","C","D","I","G")
         );
 
-        System.out.println(root.treeFromPreOrderData(preOrder).preOrder());
+        var list = new LinkedList<String>();
+        root.convertTreeToList(list);
+        System.out.println(root.computeExterior());
+//        System.out.println(root.convertTreeToList(list));
     }
 }
